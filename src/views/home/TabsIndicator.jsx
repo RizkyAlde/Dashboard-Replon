@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
@@ -16,6 +16,7 @@ import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 import { useColorScheme, useTheme } from '@mui/material/styles'
+import { useOverview } from '@/features/home/useOverview'
 
 // Third Party Imports
 import classnames from 'classnames'
@@ -26,6 +27,7 @@ import CustomAvatar from '@core/components/mui/Avatar'
 
 // Util Imports
 import { rgbaToHex } from '@/utils/rgbaToHex'
+import tabs from '@/@core/theme/overrides/tabs'
 
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
@@ -33,24 +35,24 @@ const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexChart
 // Vars
 const tabData = [
   {
-    type: 'temperature',
-    avatarIcon: 'tabler-temperature',
-    series: [{ data: [28, 10, 46, 38, 15, 30, 35, 28, 8] }]
-  },
-  {
-    type: 'air',
-    avatarIcon: 'tabler-air-conditioning',
-    series: [{ data: [35, 25, 15, 40, 42, 25, 48, 8, 30] }]
-  },
-  {
-    type: 'earth',
-    avatarIcon: 'tabler-fire-hydrant',
-    series: [{ data: [10, 22, 27, 33, 42, 32, 27, 22, 8] }]
-  },
-  {
-    type: 'lux',
+    type: 'lumen',
     avatarIcon: 'tabler-sun',
-    series: [{ data: [5, 9, 12, 18, 20, 25, 30, 36, 48] }]
+    series: [{ data: [] }]
+  },
+  {
+    type: 'humid',
+    avatarIcon: 'tabler-air-conditioning',
+    series: [{ data: [] }]
+  },
+  {
+    type: 'soil',
+    avatarIcon: 'tabler-fire-hydrant',
+    series: [{ data: [] }]
+  },
+  {
+    type: 'temp',
+    avatarIcon: 'tabler-temperature',
+    series: [{ data: [] }]
   }
 ]
 
@@ -101,7 +103,7 @@ const renderTabPanels = (value, theme, options, colors) => {
 
 const TabsIndicator = () => {
   // States
-  const [value, setValue] = useState('temperature')
+  const [value, setValue] = useState('temp')
 
   // Hooks
   const theme = useTheme()
@@ -110,6 +112,30 @@ const TabsIndicator = () => {
   // Vars
   const _mode = (mode === 'system' ? serverMode : mode) || 'light'
   const disabledText = rgbaToHex(`rgb(${theme.mainColorChannels[_mode]} / 0.4)`)
+
+  const { data, isLoading, error } = useOverview()
+
+  if (isLoading)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Loading...
+      </Typography>
+    )
+  if (error)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Error loading data.
+      </Typography>
+    )
+
+  if (!data) return
+  tabData.map((item, index) => {
+    if (item.type === data[index].type) {
+      item.series[0].data = data[index].series
+    }
+  })
+
+  console.log(data)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -163,21 +189,7 @@ const TabsIndicator = () => {
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { color: rgbaToHex(`rgb(${theme.mainColorChannels[_mode]} / 0.12)`) },
-      categories: [
-        'GR 1',
-        'GR 2',
-        'GR 3',
-        'GR 3',
-        'GR 4',
-        'GR 5',
-        'GR 6',
-        'GR 7',
-        'GR 8',
-        'GR 9',
-        'GR 10',
-        'GR 11',
-        'GR 12'
-      ],
+      categories: ['GR 1', 'GR 2', 'GR 3', 'GR 4', 'GR 5', 'GR 6', 'GR 7', 'GR 8', 'GR 9', 'GR 10', 'GR 11', 'GR 12'],
       labels: {
         style: {
           colors: disabledText,

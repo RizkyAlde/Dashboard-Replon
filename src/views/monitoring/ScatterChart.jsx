@@ -20,27 +20,27 @@ const scatterColors = {
   series1: '#ff9f43'
 }
 
-const series = [
-  {
-    name: 'Celcius',
-    data: [
-      { x: 5.4, y: 170 },
-      { x: 5.4, y: 100 },
-      { x: 6.3, y: 170 },
-      { x: 5.7, y: 140 },
-      { x: 5.9, y: 130 },
-      { x: 7.0, y: 150 },
-      { x: 8.0, y: 120 },
-      { x: 9.0, y: 170 },
-      { x: 10.0, y: 190 },
-      { x: 11.0, y: 220 },
-      { x: 12.0, y: 170 },
-      { x: 13.0, y: 230 }
-    ]
-  }
-]
+// const series = [
+//   {
+//     name: 'Celcius',
+//     data: [
+//       { x: 5.4, y: 170 },
+//       { x: 5.4, y: 100 },
+//       { x: 6.3, y: 170 },
+//       { x: 5.7, y: 140 },
+//       { x: 5.9, y: 130 },
+//       { x: 7.0, y: 150 },
+//       { x: 8.0, y: 120 },
+//       { x: 9.0, y: 170 },
+//       { x: 10.0, y: 190 },
+//       { x: 11.0, y: 220 },
+//       { x: 12.0, y: 170 },
+//       { x: 13.0, y: 230 }
+//     ]
+//   }
+// ]
 
-const ScatterChart = () => {
+const ScatterChart = ({ data }) => {
   // Hooks
   const theme = useTheme()
   const { mode } = useColorScheme()
@@ -125,7 +125,18 @@ const ScatterChart = () => {
           backgroundColor: '#ffffff'
         }}
       >
-        <AppReactApexCharts type='scatter' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts
+          type='scatter'
+          width='100%'
+          height={400}
+          options={options}
+          series={[
+            {
+              name: 'Celcius',
+              data: data
+            }
+          ]}
+        />
       </CardContent>
     </Card>
   )

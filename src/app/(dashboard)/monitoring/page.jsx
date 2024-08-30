@@ -4,21 +4,31 @@ import Link from 'next/link'
 import { useState } from 'react'
 import CardPresentage from '@views/home/CardPresentage'
 import TabsPerHour from '@views/monitoring/TabsPerHour'
-import { useGetMonitoring } from "@/features/monitoring/useGetMonitoring";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import ScatterVs from "@views/monitoring/ScatterVs";
+import { useGetMonitoring } from '@/features/monitoring/useGetMonitoring'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import ScatterVs from '@views/monitoring/ScatterVs'
 
 export default function Page() {
-  const [gr, setGr] = useState(1);
-  const { data, isLoading, error } = useGetMonitoring(gr);
+  const [gr, setGr] = useState(1)
+  const { data, isLoading, error } = useGetMonitoring(gr)
 
   const handleChange = event => {
-    setGr(event.target.value);
+    setGr(event.target.value)
   }
 
-  if (isLoading) return <Typography variant='h3' className='text-center' >Loading...</Typography>;
-  if (error) return <Typography variant='h3' className='text-center' >Error loading data.</Typography>;
+  if (isLoading)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Loading...
+      </Typography>
+    )
+  if (error)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Error loading data.
+      </Typography>
+    )
 
   return (
     <section>
@@ -38,7 +48,9 @@ export default function Page() {
           label='Greenhouse'
         >
           {[...Array(12).keys()].map(i => (
-            <MenuItem key={i + 1} value={i + 1}>Greenhouse {i + 1}</MenuItem>
+            <MenuItem key={i + 1} value={i + 1}>
+              Greenhouse {i + 1}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -47,7 +59,7 @@ export default function Page() {
           <CardPresentage
             description='Rerata indikator kelembapan udara'
             icon='tabler-air-conditioning'
-            quantity={`${data.moist} %`}
+            quantity={`${data.humid} %`}
             nameQuantity='Kelembapan udara'
             isIdeal={true}
           />
@@ -100,28 +112,38 @@ export default function Page() {
         <Grid item xs={12} sm={12} md={3}>
           <Card>
             <CardContent>
-              <Typography variant='h3' className='text-center'>Status Pompa</Typography>
-              <Typography variant='h4' className='text-center'>ON</Typography>
+              <Typography variant='h3' className='text-center'>
+                Status Pompa
+              </Typography>
+              <Typography variant='h4' className='text-center'>
+                ON
+              </Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid container xs={12} sm={12} md={9}>
           <Grid item xs={12} sm={6} md={4}>
             <div>
-              <Typography variant="body2" className="text-center" >Temperature with humidity</Typography>
+              <Typography variant='body2' className='text-center'>
+                Temperature with humidity
+              </Typography>
               <ScatterVs />
             </div>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <div>
-              <Typography variant="body2" className="text-center">Temperature vs light intensity</Typography>
-              <ScatterVs/>
+              <Typography variant='body2' className='text-center'>
+                Temperature vs light intensity
+              </Typography>
+              <ScatterVs />
             </div>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <div>
-              <Typography variant="body2" className="text-center">Temperature vs light intensity</Typography>
-              <ScatterVs/>
+              <Typography variant='body2' className='text-center'>
+                Temperature vs light intensity
+              </Typography>
+              <ScatterVs />
             </div>
           </Grid>
         </Grid>

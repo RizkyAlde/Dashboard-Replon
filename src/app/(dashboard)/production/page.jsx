@@ -4,9 +4,24 @@ import Link from 'next/link'
 import ScatterChart from '@views/monitoring/ScatterChart'
 import { useState } from 'react'
 import LineChartProduction from '@views/production/LineChartProduction'
+import { useProductionTemp } from '@/features/production/useProductionTemp'
 
 export default function Page() {
   const [gr, setGr] = useState(1)
+  const { data, isLoading, error } = useProductionTemp(gr)
+
+  if (isLoading)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Loading...
+      </Typography>
+    )
+  if (error)
+    return (
+      <Typography variant='h3' className='text-center'>
+        Error loading data.
+      </Typography>
+    )
 
   const handleChange = event => {
     setGr(event.target.value)
@@ -23,10 +38,10 @@ export default function Page() {
       <Grid item xs={12} justifyContent={'center'} xl={4}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6}>
-            <ScatterChart />
+            <ScatterChart data={data.data} />
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
-            <ScatterChart />
+            <ScatterChart data={data.data} />
           </Grid>
         </Grid>
       </Grid>
